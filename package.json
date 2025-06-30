@@ -6,8 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:types": "payload generate:types"
   },
+  "type": "module",
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@payloadcms/db-mongodb": "^3.43.0",
@@ -77,5 +79,10 @@
   "trustedDependencies": [
     "@tailwindcss/oxide",
     "unrs-resolver"
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@payload-config": ["./src/payload.config.ts"]
+    }
+  }
 }

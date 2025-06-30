@@ -1,21 +1,49 @@
-import React from 'react'
-import Navbar from './Navbar';
-import Footer from './Footer';
+import React from "react";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { SearchFilters } from "./search-filters";
+import { getPayload } from "payload";
+import configPromise from "@/payload.config";
+import { Category } from "@/payload-types";
 
 interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-const Layout = ({children}: Props) => {
+const Layout = async ({ children }: Props) => {
+  const payload = await getPayload({
+    config: configPromise,
+  });
+
+  const data = await payload.find({
+    collection: "categories",
+    pagination: false,
+    where: {
+      parent: {
+        exists: false,
+      },
+    },
+  });
+
+  function formatCategory(doc: any): Category {
+    return {
+      ...doc,
+      subcategories: (doc.subcategories?.docs ?? []).map((subDoc: Category) =>
+        formatCategory(subDoc)
+      ),
+    };
+  }
+  
+  const formattedData = data.docs.map(formatCategory);
+
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className='flex-1 bg-[#F4F4F0]'>
-        {children}
-      </div>
+      <SearchFilters data={formattedData} />
+      <div className="flex-1 bg-[#F4F4F0]">{children}</div>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default Layout;
