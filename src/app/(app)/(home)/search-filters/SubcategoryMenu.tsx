@@ -3,13 +3,14 @@ import React from "react";
 import { Categories } from "./Categories";
 import Link from "next/link"
 import { CustomCategory } from "../types";
+import { TRPCCategory } from "@/trpc/types";
 
 interface Props {
   position: {
     left: number;
     top: number;
   };
-  category: CustomCategory;
+  category: TRPCCategory;
   isOpen: boolean;
 }
 

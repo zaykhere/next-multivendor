@@ -7,9 +7,10 @@ import React, { useRef, useState } from "react";
 import { useDropDownPosition } from "./Usedropdownposition";
 import { SubcategoryMenu } from "./SubcategoryMenu";
 import { CustomCategory } from "../types";
+import { TRPCCategory } from "@/trpc/types";
 
 interface Props {
-  category: CustomCategory;
+  category: TRPCCategory;
   isActive?: boolean;
   isNavigationHovered?: boolean;
 }
@@ -37,7 +38,7 @@ export const CategoryDropdown = ({
   const dropdownPosition = getDropdownPosition();
 
   const toggleDropdown = () => {
-    if(category.subcategories?.docs?.length) {
+    if(category.subcategories?.length) {
       setIsOpen(!isOpen);
     }
   }

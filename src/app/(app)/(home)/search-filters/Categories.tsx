@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
 import { CategoriesSidebar } from "./CategoriesSidebar";
+import { TRPCCategory, TRPCCategoryArray } from "@/trpc/types";
 
 interface Props {
-  data: CustomCategory[];
+  data: TRPCCategoryArray;
 }
 
 export const Categories = ({ data }: Props) => {
@@ -18,7 +19,7 @@ export const Categories = ({ data }: Props) => {
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
 
-  const [visibleCount, setVisibleCount] = useState(data.length);
+  const [visibleCount, setVisibleCount] = useState(10);
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -68,7 +69,7 @@ export const Categories = ({ data }: Props) => {
     <div className="relative w-full">
       {/* Categories Sidebar  */}
 
-      <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} data={data} />
+      <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
 
 
       {/* Hidden div to measure all items  */}

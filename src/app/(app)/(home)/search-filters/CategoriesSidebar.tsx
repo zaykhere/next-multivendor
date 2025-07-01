@@ -13,19 +13,24 @@ import { Categories } from "./Categories";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FormattedCategory } from "@/modules/categories/server/procedures";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  data: CustomCategory[]; // TODO: Remove this later
 }
 
-export const CategoriesSidebar = ({ open, onOpenChange, data }: Props) => {
+export const CategoriesSidebar = ({ open, onOpenChange }: Props) => {
+  const trpc = useTRPC();
+  const {data} = useQuery(trpc.categories.getMany.queryOptions())
+
   const [parentCategories, setParentCategories] = useState<
-    CustomCategory[] | null
+  FormattedCategory[] | null
   >(null);
   const [selectedCategory, setSelectedCategory] =
-    useState<CustomCategory | null>(null);
+    useState<FormattedCategory | null>(null);
   const router = useRouter();
 
   // If we have parent Categories, show those otherwise show root categories
@@ -38,9 +43,9 @@ export const CategoriesSidebar = ({ open, onOpenChange, data }: Props) => {
     onOpenChange(open);
   }
 
-  const handleCategoryClick = (category: CustomCategory) => {
+  const handleCategoryClick = (category: FormattedCategory) => {
     if(category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(category.subcategories as CustomCategory[]);
+      setParentCategories(category.subcategories as FormattedCategory[]);
       setSelectedCategory(category);
     } else {
       // No subcategory case 
